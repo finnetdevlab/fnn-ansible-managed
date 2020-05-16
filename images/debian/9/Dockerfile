@@ -8,4 +8,7 @@ RUN apt-get update && \
         python3 \
         systemd
 
+# Ensure environment variables are updated before every command
+COPY utils/update-env.sh /etc/profile.d/update-env.sh
+
 CMD ["/lib/systemd/systemd"]

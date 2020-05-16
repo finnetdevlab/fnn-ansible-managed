@@ -9,4 +9,7 @@ RUN dnf -y install \
         openssh-server openssh-clients \
         python3
 
+# Ensure environment variables are updated before every command
+COPY utils/update-env.sh /etc/profile.d/update-env.sh
+
 CMD ["/usr/sbin/init"]

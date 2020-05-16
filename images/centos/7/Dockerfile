@@ -21,4 +21,7 @@ RUN yum -y update; \
     yum -y install sudo openssh-server openssh-clients \
     systemctl enable sshd
 
+# Ensure environment variables are updated before every command
+COPY utils/update-env.sh /etc/profile.d/update-env.sh
+
 CMD ["/usr/lib/systemd/systemd"]

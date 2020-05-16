@@ -12,4 +12,7 @@ RUN apt-get update && \
     sudo apt-get install -y \
         openssh-server
 
+# Ensure environment variables are updated before every command
+COPY utils/update-env.sh /etc/profile.d/update-env.sh
+
 CMD ["/lib/systemd/systemd"]
