@@ -19,6 +19,8 @@ test()
         DOCKERFILE_PATH="$dockerfile" \
         BUILD="$BUILD" \
         rspec tests/spec.rb
+
+        echo $?
     done
 }
 
