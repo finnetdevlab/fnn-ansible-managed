@@ -13,6 +13,9 @@ test()
         printf "Running tests for $file_os_family $file_os_name $file_os_version"
         printf "\n---------------------------------------------------------------\n\n"
 
+        # Suppress ruby warnings
+        export RUBYOPT="-W0";
+
         OS_FAMILY="$file_os_family" \
         OS_NAME="$file_os_name" \
         OS_VERSION="$file_os_version" \
