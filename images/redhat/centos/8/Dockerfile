@@ -10,8 +10,10 @@ RUN \
 # Install EPEL(Extra Packages for Enterprise Linux) packages. EPEL includes open source packages
 # like networking tools, sysadmin tools, programming, monitoring and so on.
 dnf -y install epel-release; \
+# Coreutils conflicts with coreutils-single. Install with allowerasing
+dnf -y --allowerasing install coreutils && \
 # Install default packages for distribution
-dnf -y --setopt=install_weak_deps=false --enablerepo=PowerTools --allowerasing install $(cat /packages.txt);
+dnf -y --setopt=install_weak_deps=false --enablerepo=PowerTools install $(cat /packages.txt);
 
 
 ###########################################    User     ############################################

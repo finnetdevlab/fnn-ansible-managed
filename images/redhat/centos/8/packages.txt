@@ -1,6 +1,5 @@
 acl
 asciidoc
-coreutils
 bzip2
 file
 glibc-langpack-en
