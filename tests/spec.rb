@@ -91,7 +91,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
     case $image_tag
     when "centos6"
       cmd = "service --status-all"
-    else
+    when "centos7"
       cmd = "systemctl list-units --type=service"
     end
 
@@ -109,8 +109,8 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         result = command("chkconfig --list | grep '2:on' | grep 'sshd'").stdout.include?("sshd")
-      else
-        result = "systemctl list-units --type=service"
+      when "centos7"
+        result = command("systemctl list-unit-files | grep enabled | grep 'sshd'").stdout.include?("sshd")
       end
       return result
     end
@@ -123,7 +123,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         result = command("service sshd status").stdout.include?("running")
-      else
+      when "centos7"
         result = command("systemctl list-units --type=service --state=running | grep 'sshd.service'").stdout.include?("sshd.service")
       end
       return result
@@ -153,8 +153,10 @@ describe "test #{arg_os_name} #{arg_os_version}" do
   end
 
   it "user connect localhost" do
-    expect(
-      command("ssh -i /home/test/.ssh/id_rsa -oStrictHostKeyChecking=no test@localhost").exit_status == 0
-    ).to eq true
+    def can_connect_itself()
+      return command("ssh -i /home/test/.ssh/id_rsa -oStrictHostKeyChecking=no test@localhost").exit_status == 0
+    end
+
+    try_until(method(:can_connect_itself), true, 5)
   end
 end
