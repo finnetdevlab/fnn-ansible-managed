@@ -88,16 +88,18 @@ describe "test #{arg_os_name} #{arg_os_version}" do
   end
 
   it "init system should be running" do
-    case $image_tag
-    when "centos6"
-      cmd = "service --status-all"
-    when "centos7"
-      cmd = "systemctl list-units --type=service"
+    def is_init_running()
+      case $image_tag
+      when "centos6"
+        cmd = "service --status-all"
+      when "centos7", "centos8"
+        cmd = "systemctl list-units --type=service"
+      end
+
+      return command(cmd).exit_status == 0
     end
 
-    expect(
-      command(cmd).exit_status == 0
-    ).to eq true
+    try_until(method(:is_init_running), true, 5)
   end
 
   it "ssh server should be installed" do
@@ -109,7 +111,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         result = command("chkconfig --list | grep '2:on' | grep 'sshd'").stdout.include?("sshd")
-      when "centos7"
+      when "centos7", "centos8"
         result = command("systemctl list-unit-files | grep enabled | grep 'sshd'").stdout.include?("sshd")
       end
       return result
@@ -123,7 +125,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         result = command("service sshd status").stdout.include?("running")
-      when "centos7"
+      when "centos7", "centos8"
         result = command("systemctl list-units --type=service --state=running | grep 'sshd.service'").stdout.include?("sshd.service")
       end
       return result
