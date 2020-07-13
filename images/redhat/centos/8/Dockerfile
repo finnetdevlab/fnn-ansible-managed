@@ -11,9 +11,11 @@ RUN \
 # like networking tools, sysadmin tools, programming, monitoring and so on.
 dnf -y install epel-release; \
 # Coreutils conflicts with coreutils-single. Install with allowerasing
-dnf -y --allowerasing install coreutils && \
+dnf -y --allowerasing install coreutils; \
 # Install default packages for distribution
-dnf -y --setopt=install_weak_deps=false --enablerepo=PowerTools install $(cat /packages.txt);
+dnf -y --setopt=install_weak_deps=false --enablerepo=PowerTools install $(cat /packages.txt); \
+# Delete all cached information
+dnf clean all
 
 
 ###########################################    User     ############################################
