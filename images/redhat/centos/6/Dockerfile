@@ -36,7 +36,13 @@ chmod 755 /home/test && \
 chmod 700 /home/test/.ssh && \
 chmod 644 /home/test/.ssh/id_rsa.pub && \
 chmod 600 /home/test/.ssh/id_rsa && \
-chmod 600 /home/test/.ssh/authorized_keys;
+chmod 600 /home/test/.ssh/authorized_keys; \
+# Create ssh folder
+mkdir /root/.ssh; \
+# Authorize config key for root user
+cat /config/keys/id_rsa.pub >> /root/.ssh/authorized_keys; \
+chmod 700 /root/.ssh && \
+chmod 600 /root/.ssh/authorized_keys;
 
 
 ########################################## Configuration ###########################################
@@ -45,8 +51,8 @@ COPY images/redhat/centos/6/configure.sh /configure.sh
 RUN \
 # Make configuration script runnable
 chmod +x /configure.sh; \
-# SSH login fix. Otherwise user is kicked off after login
-sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd;
+# Suppress TTY errors. See https://discuss.linuxcontainers.org/t/tty-error-on-centos-6-container/739/8
+echo ACTIVE_CONSOLES= >> /etc/sysconfig/init;
 
 STOPSIGNAL SIGRTMIN+3
 VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]

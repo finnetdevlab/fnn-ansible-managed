@@ -24,7 +24,6 @@ RUN \
 useradd -m -d /home/test -p salSp1wOPp6fk test; \
 # Add user to sudo group
 usermod -aG wheel test; \
-ls /home; \
 # Create ssh folder
 mkdir /home/test/.ssh; \
 # Create RSA key for test user
@@ -39,7 +38,13 @@ chmod 755 /home/test && \
 chmod 700 /home/test/.ssh && \
 chmod 644 /home/test/.ssh/id_rsa.pub && \
 chmod 600 /home/test/.ssh/id_rsa && \
-chmod 600 /home/test/.ssh/authorized_keys;
+chmod 600 /home/test/.ssh/authorized_keys; \
+# Create ssh folder
+mkdir /root/.ssh; \
+# Authorize config key for root user
+cat /config/keys/id_rsa.pub >> /root/.ssh/authorized_keys; \
+chmod 700 /root/.ssh && \
+chmod 600 /root/.ssh/authorized_keys;
 
 
 ########################################## Configuration ###########################################
@@ -58,7 +63,8 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*; \
 # SSH login fix. Otherwise user is kicked off after login
-sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd;
+sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd; \
+sed 's@account\s*required\s*pam_nologin.so@account optional pam_nologin.so@g' -i /etc/pam.d/sshd;
 
 STOPSIGNAL SIGRTMIN+3
 VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]
