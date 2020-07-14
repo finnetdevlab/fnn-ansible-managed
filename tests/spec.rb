@@ -93,7 +93,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         cmd = "service --status-all"
-      when "centos7", "centos8", "fedora26", "fedora27", "fedora28"
+      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29"
         cmd = "systemctl list-units --type=service"
       end
 
@@ -112,7 +112,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         result = command("chkconfig --list | grep '2:on' | grep 'sshd'").stdout.include?("sshd")
-      when "centos7", "centos8", "fedora26", "fedora27", "fedora28"
+      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29"
         result = command("systemctl list-unit-files | grep enabled | grep 'sshd'").stdout.include?("sshd")
       end
       return result
@@ -126,7 +126,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         result = command("service sshd status").stdout.include?("running")
-      when "centos7", "centos8", "fedora26", "fedora27", "fedora28"
+      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29"
         result = command("systemctl list-units --type=service --state=running | grep 'sshd.service'").stdout.include?("sshd.service")
       end
       return result
