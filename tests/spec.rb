@@ -19,7 +19,7 @@ if arg_os_version.nil?
   raise "os version not defined"
 end
 
-arg_dockerfile_path = ENV["DOCKERFILE_PATH"]
+$arg_dockerfile_path = ENV["DOCKERFILE_PATH"]
 arg_build_image = ENV["BUILD"]
 
 $image_name = "fnn-ansible-managed"
@@ -40,7 +40,8 @@ end
 describe "test #{arg_os_name} #{arg_os_version}" do
   before(:all) do
     if not arg_build_image.nil?
-      image = Docker::Image.build_from_dir(".", { "dockerfile" => arg_dockerfile_path })
+      puts "docker build -t #{$image_name}:#{$image_tag} -f #{$arg_dockerfile_path} ."
+      image = Docker::Image.build_from_dir(".", { "dockerfile" => $arg_dockerfile_path })
       image.tag("repo" => $image_name, "tag" => $image_tag, force: true)
     end
 
