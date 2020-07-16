@@ -93,7 +93,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6", "ubuntu14.04"
         cmd = "service --status-all"
-      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33", "ubuntu16.04"
+      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33", "ubuntu16.04", "ubuntu18.04"
         cmd = "systemctl list-units --type=service"
       end
 
@@ -114,7 +114,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
         result = command("chkconfig --list | grep '2:on' | grep 'sshd'").stdout.include?("sshd")
       when "ubuntu14.04"
         result = true
-      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33", "ubuntu16.04"
+      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33", "ubuntu16.04", "ubuntu18.04"
         result = command("systemctl list-unit-files | grep enabled | grep 'sshd'").stdout.include?("sshd")
       end
       return result
@@ -132,7 +132,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
         result = command("service ssh status").stdout.include?("running")
       when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33"
         result = command("systemctl list-units --type=service --state=running | grep 'sshd.service'").stdout.include?("sshd.service")
-      when "ubuntu16.04"
+      when "ubuntu16.04", "ubuntu18.04"
         result = command("systemctl list-units --type=service --state=running | grep 'ssh.service'").stdout.include?("ssh.service")
       end
       return result
