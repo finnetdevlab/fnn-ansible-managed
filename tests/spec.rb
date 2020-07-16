@@ -91,7 +91,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
   it "init system should be running" do
     def is_init_running()
       case $image_tag
-      when "centos6"
+      when "centos6", "ubuntu14.04"
         cmd = "service --status-all"
       when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33"
         cmd = "systemctl list-units --type=service"
@@ -112,6 +112,8 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         result = command("chkconfig --list | grep '2:on' | grep 'sshd'").stdout.include?("sshd")
+      when "ubuntu14.04"
+        result = true
       when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33"
         result = command("systemctl list-unit-files | grep enabled | grep 'sshd'").stdout.include?("sshd")
       end
@@ -126,6 +128,8 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6"
         result = command("service sshd status").stdout.include?("running")
+      when "ubuntu14.04"
+        result = command("service ssh status").stdout.include?("running")
       when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33"
         result = command("systemctl list-units --type=service --state=running | grep 'sshd.service'").stdout.include?("sshd.service")
       end
@@ -157,7 +161,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
 
   it "root should connect localhost using default key" do
     def can_connect_itself()
-      return command("ssh -i /config/keys/id_rsa -oStrictHostKeyChecking=no root@localhost").exit_status == 0
+      return command("ssh -q -i /config/keys/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@localhost 'exit 0'").exit_status == 0
     end
 
     try_until(method(:can_connect_itself), true, 5)
@@ -165,7 +169,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
 
   it "user should connect localhost using default key" do
     def can_connect_itself()
-      return command("ssh -i /config/keys/id_rsa -oStrictHostKeyChecking=no test@localhost").exit_status == 0
+      return command("ssh -q -i /config/keys/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=5 test@localhost 'exit 0'").exit_status == 0
     end
 
     try_until(method(:can_connect_itself), true, 5)
@@ -173,7 +177,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
 
   it "user should connect localhost using self generated key" do
     def can_connect_itself()
-      return command("ssh -i /home/test/.ssh/id_rsa -oStrictHostKeyChecking=no test@localhost").exit_status == 0
+      return command("ssh -q -i /home/test/.ssh/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=5 test@localhost 'exit 0'").exit_status == 0
     end
 
     try_until(method(:can_connect_itself), true, 5)
