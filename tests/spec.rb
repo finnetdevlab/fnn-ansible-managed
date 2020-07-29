@@ -19,9 +19,6 @@ if arg_os_version.nil?
   raise "os version not defined"
 end
 
-$arg_dockerfile_path = ENV["DOCKERFILE_PATH"]
-arg_build_image = ENV["BUILD"]
-
 $image_name = "fnn-ansible-managed"
 $image_tag = "#{arg_os_name}#{arg_os_version}"
 
@@ -39,12 +36,6 @@ end
 
 describe "test #{arg_os_name} #{arg_os_version}" do
   before(:all) do
-    if not arg_build_image.nil?
-      puts "docker build -t #{$image_name}:#{$image_tag} -f #{$arg_dockerfile_path} ."
-      image = Docker::Image.build_from_dir(".", { "dockerfile" => $arg_dockerfile_path })
-      image.tag("repo" => $image_name, "tag" => $image_tag, force: true)
-    end
-
     puts "docker run --name #{$image_name}-#{$image_tag} -it --rm --security-opt seccomp=unconfined --stop-signal=SIGRTMIN+3 --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro #{$image_name}:#{$image_tag}"
     @container = Docker::Container.create(
       "Image" => "#{$image_name}:#{$image_tag}",
@@ -93,7 +84,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
       case $image_tag
       when "centos6", "ubuntu14.04"
         cmd = "service --status-all"
-      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33", "ubuntu16.04", "ubuntu18.04", "ubuntu20.04"
+      else
         cmd = "systemctl list-units --type=service"
       end
 
@@ -114,7 +105,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
         result = command("chkconfig --list | grep '2:on' | grep 'sshd'").stdout.include?("sshd")
       when "ubuntu14.04"
         result = true
-      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33", "ubuntu16.04", "ubuntu18.04", "ubuntu20.04"
+      else
         result = command("systemctl list-unit-files | grep enabled | grep 'sshd'").stdout.include?("sshd")
       end
       return result
@@ -130,10 +121,10 @@ describe "test #{arg_os_name} #{arg_os_version}" do
         result = command("service sshd status").stdout.include?("running")
       when "ubuntu14.04"
         result = command("service ssh status").stdout.include?("running")
-      when "centos7", "centos8", "fedora26", "fedora27", "fedora28", "fedora29", "fedora30", "fedora31", "fedora32", "fedora33"
-        result = command("systemctl list-units --type=service --state=running | grep 'sshd.service'").stdout.include?("sshd.service")
-      when "ubuntu16.04", "ubuntu18.04", "ubuntu20.04"
+      when "ubuntu16.04", "ubuntu18.04", "ubuntu20.04", "debian8"
         result = command("systemctl list-units --type=service --state=running | grep 'ssh.service'").stdout.include?("ssh.service")
+      else
+        result = command("systemctl list-units --type=service --state=running | grep 'sshd.service'").stdout.include?("sshd.service")
       end
       return result
     end

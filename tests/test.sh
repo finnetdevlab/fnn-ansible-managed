@@ -16,11 +16,15 @@ test()
         # Suppress ruby warnings
         export RUBYOPT="-W0";
 
+
+        if [ $BUILD ]
+        then
+            docker build -t fnn-ansible-managed:$file_os_name$file_os_version -f $dockerfile .
+        fi
+
         OS_FAMILY="$file_os_family" \
         OS_NAME="$file_os_name" \
         OS_VERSION="$file_os_version" \
-        DOCKERFILE_PATH="$dockerfile" \
-        BUILD="$BUILD" \
         rspec tests/spec.rb
 
         echo $?
