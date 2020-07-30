@@ -1,5 +1,6 @@
 FROM centos:7
 
+SHELL ["/bin/bash", "-c"]
 # Copy container configuration
 COPY config /config
 
@@ -64,6 +65,7 @@ rm -f /lib/systemd/system/anaconda.target.wants/*; \
 sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd; \
 sed 's@account\s*required\s*pam_nologin.so@account optional pam_nologin.so@g' -i /etc/pam.d/sshd;
 
+ENV container=docker
 STOPSIGNAL SIGRTMIN+3
 VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]
 CMD ["/configure.sh"]

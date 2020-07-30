@@ -1,5 +1,6 @@
 FROM ubuntu:14.04
 
+SHELL ["/bin/bash", "-c"]
 # Copy container configuration
 COPY config /config
 

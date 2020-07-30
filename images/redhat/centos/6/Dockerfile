@@ -1,5 +1,6 @@
 FROM centos:6
 
+SHELL ["/bin/bash", "-c"]
 # Copy container configuration
 COPY config /config
 
@@ -54,6 +55,7 @@ chmod +x /configure.sh; \
 # Suppress TTY errors. See https://discuss.linuxcontainers.org/t/tty-error-on-centos-6-container/739/8
 echo ACTIVE_CONSOLES= >> /etc/sysconfig/init;
 
+ENV container=docker
 STOPSIGNAL SIGRTMIN+3
 VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]
 CMD ["/configure.sh"]

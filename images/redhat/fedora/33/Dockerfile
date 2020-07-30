@@ -1,5 +1,6 @@
 FROM fedora:33
 
+SHELL ["/bin/bash", "-c"]
 # Copy container configuration
 COPY config /config
 
