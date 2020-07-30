@@ -121,7 +121,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
         result = command("service sshd status").stdout.include?("running")
       when "ubuntu14.04"
         result = command("service ssh status").stdout.include?("running")
-      when "ubuntu16.04", "ubuntu18.04", "ubuntu20.04", "debian8", "debian9"
+      when "ubuntu16.04", "ubuntu18.04", "ubuntu20.04", "debian8", "debian9", "debian10"
         result = command("systemctl list-units --type=service --state=running | grep 'ssh.service'").stdout.include?("ssh.service")
       else
         result = command("systemctl list-units --type=service --state=running | grep 'sshd.service'").stdout.include?("sshd.service")
