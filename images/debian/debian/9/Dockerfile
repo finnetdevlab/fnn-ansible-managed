@@ -1,8 +1,6 @@
 FROM debian:stretch
 
 SHELL ["/bin/bash", "-c"]
-# Copy container configuration
-COPY config /config
 
 ##########################################   Packages   ############################################
 # Copy package list
@@ -17,6 +15,8 @@ apt-get clean
 
 
 ###########################################    User     ############################################
+# Copy keys
+COPY keys /keys
 RUN \
 # Create test user
 useradd -m -d /home/test -p salSp1wOPp6fk test; \
@@ -29,7 +29,7 @@ cat /dev/zero | ssh-keygen -t rsa -q -P "" -f /home/test/.ssh/id_rsa; \
 # Authorize test user to self ssh
 cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys; \
 # Authorize config key for test user
-cat /config/keys/id_rsa.pub >> /home/test/.ssh/authorized_keys; \
+cat /keys/id_rsa.pub >> /home/test/.ssh/authorized_keys; \
 # Set ownership and permissions for test user
 chown -R test /home/test && \
 chmod 755 /home/test && \
@@ -40,7 +40,7 @@ chmod 600 /home/test/.ssh/authorized_keys; \
 # Create ssh folder
 mkdir /root/.ssh; \
 # Authorize config key for root user
-cat /config/keys/id_rsa.pub >> /root/.ssh/authorized_keys; \
+cat /keys/id_rsa.pub >> /root/.ssh/authorized_keys; \
 chmod 700 /root/.ssh && \
 chmod 600 /root/.ssh/authorized_keys;
 

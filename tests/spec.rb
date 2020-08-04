@@ -154,7 +154,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
 
   it "root should connect localhost using default key" do
     def can_connect_itself()
-      return command("ssh -q -i /config/keys/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@localhost 'exit 0'").exit_status == 0
+      return command("chmod 600 -R /keys & ssh -q -i /keys/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@localhost 'exit 0'").exit_status == 0
     end
 
     try_until(method(:can_connect_itself), true, 5)
@@ -162,7 +162,7 @@ describe "test #{arg_os_name} #{arg_os_version}" do
 
   it "user should connect localhost using default key" do
     def can_connect_itself()
-      return command("ssh -q -i /config/keys/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=5 test@localhost 'exit 0'").exit_status == 0
+      return command("chmod 600 -R /keys & ssh -q -i /keys/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=5 test@localhost 'exit 0'").exit_status == 0
     end
 
     try_until(method(:can_connect_itself), true, 5)
