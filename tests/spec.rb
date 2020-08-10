@@ -36,9 +36,9 @@ end
 
 describe "test #{arg_os_name} #{arg_os_version}" do
   before(:all) do
-    puts "docker run --name #{$image_name}-#{$image_tag} -it --rm --security-opt seccomp=unconfined --stop-signal=SIGRTMIN+3 --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro #{$image_name}:#{$image_tag}"
+    puts "docker run --name finnetdevlab/#{$image_name}:#{$image_tag} -it --rm --security-opt seccomp=unconfined --stop-signal=SIGRTMIN+3 --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro finnetdevlab/#{$image_name}:#{$image_tag}"
     @container = Docker::Container.create(
-      "Image" => "#{$image_name}:#{$image_tag}",
+      "Image" => "finnetdevlab/#{$image_name}:#{$image_tag}",
       "Volumes": {
         "/run": {},
         "/sys/fs/cgroup": {},
