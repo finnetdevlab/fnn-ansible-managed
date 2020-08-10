@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bullseye-20200803
 
 SHELL ["/bin/bash", "-c"]
 

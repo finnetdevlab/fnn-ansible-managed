@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:jessie-20200803
 
 SHELL ["/bin/bash", "-c"]
 
