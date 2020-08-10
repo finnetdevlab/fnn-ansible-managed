@@ -16,7 +16,6 @@ test()
         # Suppress ruby warnings
         export RUBYOPT="-W0";
 
-
         if [ $BUILD ]
         then
             docker build -t fnn-ansible-managed:$file_os_name$file_os_version -f $dockerfile .
@@ -27,8 +26,16 @@ test()
         OS_VERSION="$file_os_version" \
         rspec tests/spec.rb
 
-        echo $?
+        if [ $? -ne 0 ]
+        then
+            printf "\n\n"
+            printf "Tests are not succeed for $file_os_family $file_os_name $file_os_version"
+            printf "\n\n"
+            exit 1
+        fi
     done
+
+    exit 0
 }
 
 while [[ $# -gt 0 ]]; do
