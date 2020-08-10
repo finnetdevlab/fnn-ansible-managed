@@ -105,6 +105,8 @@ describe "test #{arg_os_name} #{arg_os_version}" do
         result = command("chkconfig --list | grep '2:on' | grep 'sshd'").stdout.include?("sshd")
       when "ubuntu14.04"
         result = true
+      when "debian11"
+        result = command("systemctl list-unit-files | grep enabled | grep 'ssh'").stdout.include?("ssh")
       else
         result = command("systemctl list-unit-files | grep enabled | grep 'sshd'").stdout.include?("sshd")
       end
