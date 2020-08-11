@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:trusty-20191217
 
 SHELL ["/bin/bash", "-c"]
 

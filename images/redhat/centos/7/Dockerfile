@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos:7.8.2003
 
 SHELL ["/bin/bash", "-c"]
 

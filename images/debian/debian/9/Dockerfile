@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:stretch-20200803
 
 SHELL ["/bin/bash", "-c"]
 

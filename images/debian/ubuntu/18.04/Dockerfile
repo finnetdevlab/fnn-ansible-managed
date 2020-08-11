@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:bionic-20200713
 
 SHELL ["/bin/bash", "-c"]
 

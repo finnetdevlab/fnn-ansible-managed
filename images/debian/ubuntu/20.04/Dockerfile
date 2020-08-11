@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:focal-20200720
 
 SHELL ["/bin/bash", "-c"]
 

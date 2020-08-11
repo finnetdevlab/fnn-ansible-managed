@@ -40,12 +40,23 @@ All distributions located under corresponding folder `images/family/distribution
       - [32](./images/redhat/fedora/32)
       - [33](./images/redhat/fedora/33)
 
+## Building Images
+
+```lang-bash
+docker build -t finnetdevlab/fnn-ansible-managed:<os><version> -f images/<family>/<os>/<version>/Dockerfile .
+```
+
+## Running Containers
+
+```lang-bash
+docker run --name finnetdevlab/fnn-ansible-managed:<os><version> -it --rm --security-opt seccomp=unconfined --stop-signal=SIGRTMIN+3 --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro finnetdevlab/fnn-ansible-managed:<os><version>
+```
 
 ## Running Tests
 
 Tests are located under [/tests](./tests) folder.
 
-```
+```lang-bash
 tests/test.sh -f redhat -o centos -v 7 -b
 ```
 

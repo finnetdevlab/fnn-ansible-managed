@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:buster-20200803
 
 SHELL ["/bin/bash", "-c"]
 

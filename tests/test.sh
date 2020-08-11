@@ -18,7 +18,7 @@ test()
 
         if [ $BUILD ]
         then
-            docker build -t fnn-ansible-managed:$file_os_name$file_os_version -f $dockerfile .
+            docker build -t finnetdevlab/fnn-ansible-managed:$file_os_name$file_os_version -f $dockerfile .
         fi
 
         OS_FAMILY="$file_os_family" \
